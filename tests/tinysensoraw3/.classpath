@@ -6,8 +6,8 @@
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="/Users/manokel/_code/java/libs/jcommon-1.0.23.jar"/>
-	<classpathentry kind="lib" path="/Users/manokel/_code/java/libs/jfreechart-1.0.19.jar"/>
-	<classpathentry kind="lib" path="/Users/manokel/_code/java/libs/jSerialComm-2.9.3.jar"/>
+	<classpathentry kind="lib" path="/Users/manokel/_code/eclipse-workspace/libs/jcommon-1.0.23.jar"/>
+	<classpathentry kind="lib" path="/Users/manokel/_code/eclipse-workspace/libs/jfreechart-1.0.19.jar"/>
+	<classpathentry kind="lib" path="/Users/manokel/_code/eclipse-workspace/libs/jSerialComm-2.9.3.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

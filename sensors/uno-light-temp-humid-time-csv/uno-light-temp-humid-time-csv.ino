@@ -39,14 +39,14 @@ void loop() {
   // float hif = dht.computeHeatIndex(f, h);
   // float hic = dht.computeHeatIndex(t, h, false);
   Serial.print(light);
-  Serial.print(","),
-  Serial.print(temperature);
-  Serial.print(","),
-  Serial.print(humidity);
-  Serial.print(","),
-  Serial.print(time);
-  Serial.print(","),
-  Serial.print(deviceID);
+  // Serial.print(","),
+  // Serial.print(temperature);
+  // Serial.print(","),
+  // Serial.print(humidity);
+  // Serial.print(","),
+  // Serial.print(time);
+  // Serial.print(","),
+  // Serial.print(deviceID);
   Serial.println();
   delay(1000);
 }

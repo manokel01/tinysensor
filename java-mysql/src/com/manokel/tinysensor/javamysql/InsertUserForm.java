@@ -26,6 +26,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.awt.event.ActionEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class InsertUserForm extends JFrame {
 	private static final long serialVersionUID = 1L;
@@ -36,9 +38,21 @@ public class InsertUserForm extends JFrame {
 	private JTextField txtStreet;
 	private JTextField txtCity;
 	private JTextField txtCountry;
+	private PreparedStatement p;
 
 	
 	public InsertUserForm() {
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowActivated(WindowEvent e) {
+				txtLastname.setText("");
+				txtFirstname.setText("");
+				txtEmail.setText("");
+				txtStreet.setText("");
+				txtCity.setText("");
+				txtCountry.setText("");
+			}
+		});
 		setTitle("Insert User Details");
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		setBounds(100, 100, 476, 421);
@@ -63,7 +77,7 @@ public class InsertUserForm extends JFrame {
 				
 				try {
 					Connection conn = DBUtil.getConnection();
-					PreparedStatement p = conn.prepareStatement(sql);
+					p = conn.prepareStatement(sql);
 					
 					inputLastname = txtLastname.getText().trim();
 					inputFirstname = txtFirstname.getText().trim();
@@ -72,8 +86,10 @@ public class InsertUserForm extends JFrame {
 					inputCity = txtCity.getText().trim();
 					inputCountry = txtCountry.getText().trim();
 					
-					if (inputLastname.equals("") || inputFirstname.equals("") || inputEmail.equals("")
-							|| inputStreet.equals("") || inputCity.equals("") || inputCountry.equals("")) {
+					// validations
+					if (inputLastname.equals("") || inputFirstname.equals("") || inputEmail.equals(""))
+//							|| inputStreet.equals("") || inputCity.equals("") || inputCountry.equals("")) 
+					{
 						return;
 					}
 					
@@ -88,6 +104,12 @@ public class InsertUserForm extends JFrame {
 					JOptionPane.showMessageDialog(null, n + " records inserted", "INSERT", JOptionPane.PLAIN_MESSAGE);				
 				} catch (SQLException e1) {
 					e1.printStackTrace();
+				} finally {
+					try {
+						if (p != null) p.close();
+					} catch (SQLException e1) {
+						e1.printStackTrace();
+					}
 				}
 			}
 		});

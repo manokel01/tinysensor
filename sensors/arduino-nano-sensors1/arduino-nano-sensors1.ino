@@ -3,7 +3,7 @@
  * - temperature (±0.1°C)/ HS3003 sensor
  * - humidity (%RH)/ HS3003 sensor
  * - barometric pressure (260-1260 kPa) / LPS22HB sensor
- (* - proximity (0-255)/ APDS9960 sensor)
+ (* - proximity (0-255)/ APDS9960 sensor ---> does't work if meassuring light)
  * - light intensity (0-4097) / APDS9960 sensor
  * - RGB levels (0-4097) / APDS9960 sensor
  * - tilt/position (x, y axes) / BMI270_BMM150 sensors
@@ -61,12 +61,12 @@ void setup() {
     while (1)
       ;
   }
-  // if (!APDS.begin()) {
-  //   Serial.println("Error initializing APDS9960 sensor.");
-  // }
-  Serial.print("Accelerometer sample rate = ");
-  Serial.print(IMU.accelerationSampleRate());
-  Serial.println(" Hz");
+  if (!APDS.begin()) {
+    Serial.println("Error initializing APDS9960 sensor.");
+  }
+  // Serial.print("Accelerometer sample rate = ");
+  // Serial.print(IMU.accelerationSampleRate());
+  // Serial.println(" Hz");
 }
 
 void loop() {
@@ -135,16 +135,16 @@ void loop() {
   //   snprintf(timestamp, sizeof(timestamp), "%4d-%02d-%02dT%2d:%2d:%02d+0200", year(), month(), day(), hour(), minute(), second());
   // }
 
-  Serial.print(deviceID);
-  Serial.print(",");
+  // Serial.print(deviceID);
+  // Serial.print(",");
   Serial.print(temperature);
   Serial.print(",");
   Serial.print(humidity);
   Serial.print(",");
   Serial.print(pressure);
   Serial.print(",");
-  // Serial.print(proximity);
-  // Serial.print(",");
+  Serial.print(proximity);
+  Serial.print(",");
   Serial.print(light);
   Serial.print(",");
   Serial.print(r);
@@ -156,8 +156,8 @@ void loop() {
   Serial.print(degreesX);
   Serial.print(",");
   Serial.print(degreesY);
-  Serial.print(",");
-  Serial.print(timelapsed);
+  // Serial.print(",");
+  // Serial.print(timelapsed);
   // Serial.print(",");
   // Serial.print(timestamp);
   Serial.println();

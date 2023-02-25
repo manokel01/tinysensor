@@ -259,72 +259,90 @@ public class ControlFrame extends JFrame {
 		
 		JButton btnClose = new JButton("Close");
 		
-		JButton btnOpen = new JButton("Open");
-		btnOpen.addActionListener(new ActionListener() {
+		JButton btnConnect = new JButton("Connect");
+		btnConnect.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					SerialPort[] portList = SerialPort.getCommPorts();
-					chosenPort = portList[comboBoxComPorts.getSelectedIndex()];
-					chosenPort.setBaudRate(Integer.parseInt(comboBoxBaudRate.getSelectedItem().toString()));
-					chosenPort.setNumDataBits(Integer.parseInt(comboBoxDataBits.getSelectedItem().toString()));
-					chosenPort.setNumStopBits(Integer.parseInt(comboBoxStopBits.getSelectedItem().toString()));
-					chosenPort.setNumStopBits(comboBoxParity.getSelectedIndex());
-					chosenPort.openPort();
+					if (btnConnect.getText().equals("Connect")) {
+						SerialPort[] portList = SerialPort.getCommPorts();
+						chosenPort = portList[comboBoxComPorts.getSelectedIndex()];
+						chosenPort.setBaudRate(Integer.parseInt(comboBoxBaudRate.getSelectedItem().toString()));
+						chosenPort.setNumDataBits(Integer.parseInt(comboBoxDataBits.getSelectedItem().toString()));
+						chosenPort.setNumStopBits(Integer.parseInt(comboBoxStopBits.getSelectedItem().toString()));
+						chosenPort.setNumStopBits(comboBoxParity.getSelectedIndex());
+						chosenPort.openPort();
 
-					if (chosenPort.isOpen()) {	
-						//JOptionPane.showMessageDialog(btnOpen, chosenPort.getDescriptivePortName() + " --- Port is OPEN.");
-						comboBoxComPorts.setEnabled(false);
-						btnOpen.setEnabled(false);
-						btnClose.setEnabled(true);
-						btnGraphs.setEnabled(true);
-						btnSendData.setEnabled(true);
-						progressBarSerial.setValue(100);
-						
-						Thread dataTasks = new Thread(new Runnable() {
-				            @Override
-				            public void run() {
-				            	
-				                double x = 0;
-				                Scanner scanner = new Scanner(chosenPort.getInputStream());
-				                scanner.nextLine(); // consumes first unreliable reading
-				                while (scanner.hasNextLine()) {
-				                    try  {
-				                        String line = scanner.nextLine();
-				                        String[] values = line.split(",");
-				                        String lightValue = values[0];
-				                        String tempValue = values[1];
-				                        String humidValue = values[2];
-				                        System.out.println(lightValue);
-				                        System.out.println(tempValue);
-				                        System.out.println(humidValue);
-				                        lightData.add(x++, Double.valueOf(lightValue));
-				                        tempData.add(x++, Double.valueOf(tempValue));
-				                        humidData.add(x++, Double.valueOf(humidValue));
-				                        //br.lines().forEach(line -> System.out.println(line));
-				                    } catch (Exception e) {
-				                        System.err.println("Corrupt incoming data. " + e);
-				                        scanner.nextLine(); 
-				                        //throw e;
-				                        //sp.closePort();
+						if (chosenPort.isOpen()) {	
+							//JOptionPane.showMessageDialog(btnOpen, chosenPort.getDescriptivePortName() + " --- Port is OPEN.");
+							comboBoxComPorts.setEnabled(false);
+							btnConnect.setEnabled(false);
+							btnClose.setEnabled(true);
+							btnGraphs.setEnabled(true);
+							btnSendData.setEnabled(true);
+							progressBarSerial.setValue(100);
+							btnConnect.setText("Disconnect");
+							System.out.println("Port is open");
+							
+							Thread dataTasks = new Thread(new Runnable() {
+
+				                @Override
+				                public void run() {
+									System.out.println("test");
+				                	int x = 0;
+				                	Scanner scanner = new Scanner(chosenPort.getInputStream());                 
+				                    while (scanner.hasNextLine()) {
+				                    	try  {
+				                            String line = scanner.nextLine();
+				                            String[] values = line.split(",");
+				                            String tempValue = values[0];
+				                            String humidValue = values[1];
+//				                            String pressureValue = values[2];
+//				                            String proximityValue = values[3];
+				                            String lightValue = values[4];
+//				                            String redValue = values[5];
+//				                            String greenValue = values[6];
+//				                            String blueValue = values[7];
+//				                            String degreesXValue = values[8];
+//				                            String degreesYValue = values[9];
+				                            System.out.println(tempValue + "," + humidValue + "," + lightValue);
+//				                            tempData.add(x++, Double.valueOf(tempValue));
+//				                            humidData.add(x++, Double.valueOf(humidValue));
+//				                            pressureData.add(x++, Double.valueOf(pressureValue));
+				                            // MainFrame.proximityData.add(x++, Double.valueOf(proximityValue));
+//				                            lightData.add(x++, Double.valueOf(lightValue));
+//				                            redLightData.add(x++, Double.valueOf(redValue));
+//				                            greenLightData.add(x++, Double.valueOf(greenValue));
+//				                            blueLightData.add(x++, Double.valueOf(blueValue));
+//				                            degreesXData.add(x++, Double.valueOf(degreesXValue));
+//				                            degreesYData.add(x++, Double.valueOf(degreesYValue));
+				                            } catch (Exception e) {
+				                                System.err.println("Corrupt incoming data. " + e);
+				                                scanner.nextLine(); 
+				                                //throw e;
+				                                chosenPort.closePort();
+				                            }
 				                    }
 				                }
-				            }
-				        });
-						dataTasks.start();
-					} else {
-						JOptionPane.showMessageDialog(btnOpen, chosenPort.getDescriptivePortName() + " -- FAILED to open.");
-					}
+				            });
+				            dataTasks.start();
+						} else {
+							JOptionPane.showMessageDialog(btnConnect, chosenPort.getDescriptivePortName() + " -- FAILED to open.");
+							System.out.println("Port is closed.");
+							chosenPort.closePort();
+							btnConnect.setText("Disconnect");
+						}
+					} 
 					
 				} catch (IndexOutOfBoundsException e1) {
-					JOptionPane.showMessageDialog(btnOpen, "Please chose COM port.", "EROOR", getDefaultCloseOperation());
+					JOptionPane.showMessageDialog(btnConnect, "Please chose COM port.", "EROOR", getDefaultCloseOperation());
 				} catch (Exception e2) {
-					JOptionPane.showMessageDialog(btnOpen, e2, "ERROR", getDefaultCloseOperation());
+					JOptionPane.showMessageDialog(btnConnect, e2, "ERROR", getDefaultCloseOperation());
 				}
 			}
 		});
-		btnOpen.setBounds(151, 303, 117, 29);
-		panelSettings.add(btnOpen);
-		btnOpen.setEnabled(true);
+		btnConnect.setBounds(151, 303, 117, 29);
+		panelSettings.add(btnConnect);
+		btnConnect.setEnabled(true);
 
 		btnClose.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -332,7 +350,7 @@ public class ControlFrame extends JFrame {
 					if (chosenPort.isOpen()) {
 						chosenPort.closePort();
 						comboBoxComPorts.setEnabled(true);	
-						btnOpen.setEnabled(true);
+						btnConnect.setEnabled(true);
 						btnClose.setEnabled(false);
 						btnGraphs.setEnabled(false);
 						progressBarSerial.setValue(0);

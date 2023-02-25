@@ -22,15 +22,15 @@ import java.util.regex.Pattern;
 public class Main {
 
    
-    static final String portName = "/dev/cu.usbmodem14101";
-    static long timeNow = System.currentTimeMillis();
-    private static final long serialVersionUID = 1L;
+//    static final String portName = "/dev/cu.usbmodem143201";
+//    static long timeNow = System.currentTimeMillis();
+//    private static final long serialVersionUID = 1L;
     
     public static void main(String[] args) throws IOException {
 
-        SerialPort sp = SerialPort.getCommPort(portName);
-        sp.setComPortParameters(9600, 8, 1, 0);
-        sp.closePort();
+//        SerialPort sp = SerialPort.getCommPort(portName);
+//        sp.setComPortParameters(9600, 8, 1, 0);
+//        sp.closePort();
         
         /* Use an appropriate Look and Feel */
         try {
