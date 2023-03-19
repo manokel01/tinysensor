@@ -143,8 +143,8 @@ void loop() {
   Serial.print(",");
   Serial.print(pressure);
   Serial.print(",");
-  Serial.print(proximity);
-  Serial.print(",");
+  // Serial.print(proximity);
+  // Serial.print(",");
   Serial.print(light);
   Serial.print(",");
   Serial.print(r);
